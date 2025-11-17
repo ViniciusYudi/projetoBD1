@@ -1,6 +1,6 @@
 -- Pessoa
 CREATE TABLE PESSOA (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     tipo VARCHAR(20) NOT NULL
@@ -8,23 +8,30 @@ CREATE TABLE PESSOA (
 
 -- Disciplina
 CREATE TABLE DISCIPLINA (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     codigo VARCHAR(15) UNIQUE
 );
 
 -- Formulario
 CREATE TABLE FORMULARIO (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     titulo VARCHAR(200) NOT NULL,
     semestre VARCHAR(10) NOT NULL,
     data_inicio DATE NOT NULL,
     data_fim DATE NOT NULL
 );
 
+-- Questao
+CREATE TABLE QUESTAO (
+    id SERIAL PRIMARY KEY,
+    enunciado TEXT NOT NULL,
+    tipo VARCHAR(10) NOT NULL
+);
+
 -- Turma
 CREATE TABLE TURMA (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     id_professor INT NOT NULL,
     id_disciplina INT NOT NULL,
     id_formulario_padrao INT,
@@ -34,14 +41,7 @@ CREATE TABLE TURMA (
     FOREIGN KEY (id_disciplina) REFERENCES DISCIPLINA(id),
     FOREIGN KEY (id_formulario_padrao) REFERENCES FORMULARIO(id),
 
-    UNIQUE KEY uk_turma (id_disciplina, semestre)
-);
-
--- Questao
-CREATE TABLE QUESTAO (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    enunciado TEXT NOT NULL,
-    tipo VARCHAR(10) NOT NULL
+    UNIQUE (id_disciplina, semestre)
 );
 
 -- Formulario_Questao
@@ -60,17 +60,16 @@ CREATE TABLE FORMULARIO_QUESTAO (
 CREATE TABLE MATRICULA_TURMA (
     id_pessoa INT NOT NULL,
     id_turma INT NOT NULL,
-    data_matricula DATE NOT NULL,
+    data_matricula DATE NOT NULL DEFAULT CURRENT_DATE,
 
     PRIMARY KEY (id_pessoa, id_turma),
-
     FOREIGN KEY (id_pessoa) REFERENCES PESSOA(id),
     FOREIGN KEY (id_turma) REFERENCES TURMA(id)
 );
 
 -- Submissao
 CREATE TABLE SUBMISSAO (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     id_pessoa INT NOT NULL,
     id_turma INT NOT NULL,
     id_questao INT NOT NULL,
@@ -83,5 +82,17 @@ CREATE TABLE SUBMISSAO (
     FOREIGN KEY (id_turma) REFERENCES TURMA(id),
     FOREIGN KEY (id_questao) REFERENCES QUESTAO(id),
 
-    UNIQUE KEY resposta_aluno_turma_questao (id_pessoa, id_questao, id_turma)
+    UNIQUE (id_pessoa, id_questao, id_turma)
 );
+
+-- Formulario_Turma
+CREATE TABLE FORMULARIO_TURMA (
+    id SERIAL PRIMARY KEY,
+    id_formulario INTEGER NOT NULL REFERENCES formulario(id),
+    id_turma INTEGER NOT NULL REFERENCES turma(id),
+    
+    UNIQUE (id_formulario, id_turma) 
+);
+
+DELETE FROM SUBMISSAO WHERE id_questao IN (1, 2, 3);
+DELETE FROM QUESTAO WHERE id IN (1, 2, 3);
