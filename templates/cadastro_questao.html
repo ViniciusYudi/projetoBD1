@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Cadastrar Questão{% endblock %}
+
+{% block page_title %}Cadastrar Nova Questão{% endblock %}
+
+{% block content %}
+    
+<!-- INÍCIO DA CORREÇÃO: Exibe a mensagem de feedback do backend -->
+{% if message %}
+    {% set is_success = "sucesso" in message|lower %}
+    <div class="p-4 mb-6 rounded-lg 
+                {% if is_success %}
+                    bg-green-100 border-l-4 border-green-500 text-green-700
+                {% else %}
+                    bg-red-100 border-l-4 border-red-500 text-red-700
+                {% endif %}" 
+         role="alert">
+        <p class="font-bold">
+            {% if is_success %}Sucesso!{% else %}Erro!{% endif %}
+        </p>
+        <p>{{ message }}</p>
+    </div>
+{% endif %}
+<!-- FIM DA CORREÇÃO -->
+
+<p class="text-gray-600 mb-6">
+    Use o formulário abaixo para adicionar uma nova questão ao banco geral.
+    Ela poderá ser usada em futuros formulários de avaliação.
+</p>
+
+<!-- O formulário envia para a própria rota (cadastrar_questao) via POST -->
+<form action="{{ url_for('cadastrar_questao') }}" method="POST" class="space-y-6 max-w-xl">
+    <div>
+        <label for="enunciado" class="block text-sm font-medium text-gray-700 mb-1">
+            Enunciado da Questão:
+        </label>
+        <textarea id="enunciado" name="enunciado" rows="4" required
+                  class="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+    </div>
+    
+    <div>
+        <label for="tipo" class="block text-sm font-medium text-gray-700 mb-1">
+            Tipo da Questão:
+        </label>
+        <select id="tipo" name="tipo" required
+                class="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white">
+            <option value="">-- Escolha um tipo --</option>
+            <option value="nota">Nota (1 a 5)</option>
+            <option value="texto">Texto Livre</option>
+        </select>
+    </div>
+    
+    <div>
+        <button type="submit"
+                class="bg-blue-600 text-white px-6 py-2 rounded-md font-medium hover:bg-blue-700 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            Salvar Questão
+        </button>
+    </div>
+</form>
+
+{% endblock %}
