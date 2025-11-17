@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Seleção de Usuário{% endblock %}
+
+{% block page_title %}{% endblock %}
+
+{% block content %}
+<div class="flex flex-col items-center justify-center min-h-[70vh]">
+    <div class="bg-white p-8 sm:p-10 rounded-xl shadow-2xl w-full max-w-md">
+        <h2 class="text-3xl font-extrabold text-gray-900 text-center mb-2">Seja Bem-vindo!</h2>
+        <p class="text-gray-500 text-center mb-6">Selecione seu usuário para continuar</p>
+
+        <form method="POST" action="{{ url_for('process_login') }}" class="space-y-6">
+            <div>
+                <label for="aluno" class="block text-sm font-medium text-gray-700 mb-2">Selecione o Aluno:</label>
+                <select id="aluno" name="aluno_id" required class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
+                    {% for aluno in alunos %}
+                    <option value="{{ aluno.id }}">{{ aluno.nome }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-lg text-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
+                Entrar (Aluno)
+            </button>
+        </form>
+
+        <div class="mt-6 border-t border-gray-200 pt-6 space-y-3">
+             <a href="{{ url_for('listar_questoes') }}" 
+                class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition duration-150 ease-in-out">
+                Visão do Coordenador
+            </a>
+            
+             <a href="{{ url_for('home_professor') }}" 
+                class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition duration-150 ease-in-out">
+                Visão do Professor
+            </a>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}

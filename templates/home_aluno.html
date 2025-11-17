@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Painel do Aluno{% endblock %}
+
+{% block page_title %}
+    <span class="text-3xl font-extrabold text-gray-900 flex items-center">
+        Painel do Aluno: {{ aluno_nome }}
+    </span>
+{% endblock %}
+
+{% block content %}
+    
+    <h2 class="text-2xl font-semibold text-gray-800 mb-6">Minhas Turmas e Avaliações Pendentes</h2>
+
+    {% if turmas %}
+        <div class="overflow-x-auto shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+            <table class="min-w-full divide-y divide-gray-300">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">DISCIPLINA</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PROFESSOR</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">AVALIAÇÃO ATRIBUÍDA</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">STATUS</th>
+                        </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 bg-white">
+                    {% for turma in turmas %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            {{ turma.disciplina_nome }}
+                        </td>
+                        
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {{ turma.professor_nome }}
+                        </td>
+                        
+                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                            {% if turma.id_formulario %}
+                                <div>
+                                    <p class="text-sm font-semibold text-indigo-600">{{ turma.formulario_titulo }}</p>
+                                    <p class="text-xs text-gray-500">Vigência: {{ turma.data_inicio_avaliacao | default('N/A') }} a {{ turma.data_fim_avaliacao | default('N/A') }}</p>
+                                </div>
+                                
+                                {% if not turma.is_avaliada %}
+                                    <a href="{{ url_for('mostrar_formulario', aluno_id=aluno_id, turma_id=turma.turma_id) }}" 
+                                       class="mt-2 inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                                        Avaliar
+                                    </a>
+                                {% endif %}
+
+                            {% else %}
+                                <span class="text-red-600">Nenhum formulário atribuído</span>
+                            {% endif %}
+                        </td>
+                        
+                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                            {% if turma.id_formulario %}
+                                {% if turma.is_avaliada %}
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                        CONCLUÍDA
+                                    </span>
+                                {% else %}
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                        PENDENTE
+                                    </span>
+                                {% endif %}
+                            {% else %}
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-600">
+                                    Indisponível
+                                </span>
+                            {% endif %}
+                        </td>
+                        
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-lg text-gray-500">Você não está matriculado em nenhuma turma no momento.</p>
+    {% endif %}
+
+    {% if message %}
+        <div class="mt-8 p-4 bg-blue-100 text-blue-700 rounded-lg">
+            {{ message }}
+        </div>
+    {% endif %}
+
+    <div class="mt-8">
+        <a href="{{ url_for('index') }}" class="text-sm font-medium text-gray-500 hover:text-indigo-600 transition-colors">&larr; Voltar para a Tela de Login</a>
+    </div>
+{% endblock %}
