@@ -1,0 +1,68 @@
+Diagrama Entidade Relacionamento
+
+erDiagram
+
+    PESSOA {
+        int id PK
+        varchar nome
+        varchar tipo -- 'aluno', 'professor', 'coordenador'
+    }
+
+    DISCIPLINA {
+        int id PK
+        varchar nome
+    }
+
+    TURMA {
+        int id PK
+        int id_professor FK
+        int id_disciplina FK
+        int id_formulario_padrao FK 
+        varchar semestre
+    }
+
+    FORMULARIO {
+        int id PK
+        varchar titulo
+        varchar semestre
+        date data_fim
+    }
+
+    QUESTAO {
+        int id PK
+        text enunciado
+        varchar tipo -- 'nota', 'texto'
+    }
+
+    SUBMISSAO {
+        int id PK
+        int id_turma FK
+        int id_questao FK
+        int id_pessoa FK
+        int nota_resposta -- para tipo 'nota'	
+        text texto_resposta -- para tipo 'texto'
+    }
+
+    FORMULARIO_QUESTAO {
+        int id_formulario PK, FK
+        int id_questao PK, FK
+        int ordem
+        decimal valor_questao
+    }
+
+   MATRICULA_TURMA {
+        int id_pessoa PK, FK
+        int id_turma PK, FK
+        date data_matricula
+   }
+
+   PESSOA ||--o{ TURMA : "ensina"
+   TURMA }o--|| DISCIPLINA : "é da"
+   FORMULARIO ||--o{ FORMULARIO_QUESTAO : "contém"
+   QUESTAO ||--o{ FORMULARIO_QUESTAO: “usada em”
+   PESSOA ||--o{ SUBMISSAO: “fez”
+   PESSOA ||--o{ MATRICULA_TURMA : "cursa" 
+   TURMA ||--o{ MATRICULA_TURMA : "contém"
+   SUBMISSAO }o--|| TURMA : "pertence a"
+   SUBMISSAO }o--|| QUESTAO : "responde"
+   FORMULARIO o|--|| TURMA : "utilizado em”
