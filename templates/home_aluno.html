@@ -38,7 +38,8 @@
                             {% if turma.id_formulario %}
                                 <div>
                                     <p class="text-sm font-semibold text-indigo-600">{{ turma.formulario_titulo }}</p>
-                                    <p class="text-xs text-gray-500">Vigência: {{ turma.data_inicio_avaliacao | default('N/A') }} a {{ turma.data_fim_avaliacao | default('N/A') }}</p>
+                                    <!-- CORREÇÃO AQUI: Mudamos de data_inicio_avaliacao para data_inicio -->
+                                    <p class="text-xs text-gray-500">Vigência: {{ turma.data_inicio.strftime('%d/%m/%Y') }} a {{ turma.data_fim.strftime('%d/%m/%Y') }}</p>
                                 </div>
                                 
                                 {% if not turma.is_avaliada %}
@@ -49,7 +50,7 @@
                                 {% endif %}
 
                             {% else %}
-                                <span class="text-red-600">Nenhum formulário atribuído</span>
+                                <span class="text-red-600 text-xs font-bold">Nenhum formulário atribuído</span>
                             {% endif %}
                         </td>
                         

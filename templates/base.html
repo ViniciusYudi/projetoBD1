@@ -3,50 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Sistema BD1{% endblock %}</title>
+    <title>{% block title %}Sistema Avaliação{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Define a fonte Inter como padrao */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f4f7f9;
+            background-color: #f3f4f6;
         }
     </style>
 </head>
-<body>
+<body class="flex flex-col min-h-screen">
+
     <nav class="bg-gray-800 shadow-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 
-                <div class="flex-shrink-0">
-                    </div>
+                <div class="flex-shrink-0 text-white font-bold text-xl">
+                    Sistema Avaliação
+                </div>
                 
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
                         
                         {% if '/coordenador/' in request.path %}
-                            <a href="{{ url_for('cadastrar_questao') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Cadastrar Questão</a>
-                            <a href="{{ url_for('listar_questoes') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Listar Questões</a>
-                            <a href="{{ url_for('gerenciar_formularios') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Gerenciar Formulários</a>
+                            <a href="{{ url_for('painel_geral') }}" class="text-white bg-gray-900 px-3 py-2 rounded-md text-sm font-medium">Painel Geral</a>
+                            <a href="{{ url_for('gerenciar_formularios') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Formulários</a>
+                            <a href="{{ url_for('listar_questoes') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Questões</a>
+                        {% endif %}
+
+                        {% if '/professor/' in request.path %}
+                            <span class="text-gray-400 text-sm mr-2">Área do Professor</span>
                         {% endif %}
                         
-                        {% if aluno_id %}
-                            <a href="{{ url_for('index') }}" class="text-red-300 hover:bg-red-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Sair</a>
-                        {% elif request.path != '/' %}
-                            <a href="{{ url_for('index') }}" class="text-red-300 hover:bg-red-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Sair</a>
+                        {% if request.path != '/' and request.path != '/login' %}
+                            <a href="{{ url_for('index') }}" class="text-red-300 hover:bg-red-900 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition">Sair</a>
                         {% endif %}
+
                     </div>
                 </div>
             </div>
         </div>
     </nav>
 
-    <main class="max-w-7xl mx-auto py-8 sm:px-6 lg:px-8">
-        <h1 class="text-3xl font-extrabold text-gray-900 mb-8">{% block page_title %}{% endblock %}</h1>
-        <div class="bg-white p-6 sm:p-8 rounded-xl shadow-lg">
-            {% block content %}{% endblock %}
-        </div>
+    <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 w-full">
+        
+        {% if self.page_title() %}
+            <h1 class="text-3xl font-extrabold text-gray-900 mb-8">
+                {% block page_title %}{% endblock %}
+            </h1>
+        {% endif %}
+
+        {% block content %}{% endblock %}
     </main>
+
+    <footer class="bg-gray-800 text-gray-400 py-6 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center text-sm">
+            &copy; 2025 Sistema de Avaliação Acadêmica
+        </div>
+    </footer>
+
 </body>
 </html>
